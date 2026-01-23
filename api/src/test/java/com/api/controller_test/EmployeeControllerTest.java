@@ -3,13 +3,13 @@ package com.api.controller_test;
 import com.api.controllers.EmployeeController;
 import com.api.models.EmployeeModel;
 import com.api.services.interfaces.IEmployeeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -48,9 +48,10 @@ public class EmployeeControllerTest {
                         .content(objectMapper.writeValueAsString(employee)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.firstName").value("John"))
-                .andExpect(jsonPath("$.email").value("john.doe@example.com"));
+                .andExpect(jsonPath("$.name").value("John Doe"))
+                .andExpect(jsonPath("$.email").value("john.doe@example.com"))
+                .andExpect(jsonPath("$.department").value("IT"))
+                .andExpect(jsonPath("$.salary").value("99999"));
 
         verify(employeeService, times(1)).createEmployee(any(EmployeeModel.class));
     }
