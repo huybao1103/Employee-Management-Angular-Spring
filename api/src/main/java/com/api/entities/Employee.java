@@ -7,33 +7,20 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "employees")
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Employee extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "varchar(200)")
     private String name;
     private String email;
 
-    @Column(nullable = false, columnDefinition = "varchar(200)")
-    private String department;
-
     @Column(nullable = false, columnDefinition = "decimal(10,2) default '0.00'")
     private double salary;
 
-    @Column(nullable = false, updatable = false, columnDefinition = "timestamp default current_timestamp")
-    private Date createdDate;
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
     // Getters and setters
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -51,11 +38,11 @@ public class Employee {
         this.email = email;
     }
 
-    public String getDepartment() {
+    public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 
@@ -65,13 +52,5 @@ public class Employee {
 
     public void setSalary(double salary) {
         this.salary = salary;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
     }
 }
