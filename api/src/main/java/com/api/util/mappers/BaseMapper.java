@@ -2,7 +2,6 @@ package com.api.util.mappers;
 
 import com.api.entities.BaseEntity;
 import com.api.models.BaseModel;
-import org.mapstruct.Mapper;
 
 import java.util.List;
 
