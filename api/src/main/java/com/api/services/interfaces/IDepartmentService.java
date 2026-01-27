@@ -1,7 +1,7 @@
 package com.api.services.interfaces;
 
-import com.api.models.DepartmentBasicInfoModel;
-import com.api.models.DepartmentModel;
+import com.api.models.Department.DepartmentBasicInfoModel;
+import com.api.models.Department.DepartmentModel;
 
 import java.util.List;
 

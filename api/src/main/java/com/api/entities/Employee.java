@@ -17,7 +17,7 @@ public class Employee extends BaseEntity {
     private double salary;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(name = "department_id")
     private Department department;
 
     // Getters and setters

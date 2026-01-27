@@ -1,11 +1,12 @@
 package com.api.services.implement;
 
 import com.api.entities.Employee;
-import com.api.models.EmployeeModel;
-import com.api.repositories.implement.EmployeeRepository;
+import com.api.models.Employee.EmployeeModel;
+import com.api.models.Employee.EmployeeUpdateModel;
 import com.api.repositories.interfaces.IEmployeeRepository;
 import com.api.services.interfaces.IEmployeeService;
-import com.api.util.mappers.IEmployeeMapper;
+import com.api.util.mappers.Employee.IEmployeeMapper;
+import com.api.util.mappers.Employee.IEmployeeUpdateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +18,21 @@ public class EmployeeService implements IEmployeeService {
     @Autowired
     private IEmployeeMapper employeeMapper;
     @Autowired
+    private IEmployeeUpdateMapper employeeUpdateMapper;
+    @Autowired
     private IEmployeeRepository employeeRepository;
 
     @Override
-    public EmployeeModel createEmployee(EmployeeModel employeeModel) {
-        Employee emp = employeeMapper.toEntity(employeeModel);
+    public EmployeeUpdateModel createEmployee(EmployeeUpdateModel employeeModel) {
+        Employee emp = employeeUpdateMapper.toEntity(employeeModel);
         employeeRepository.save(emp);
         return employeeModel;
     }
 
     @Override
     public List<EmployeeModel> getAllEmployees() {
-        return employeeMapper.toDtoList(employeeRepository.findAll());
+        List<Employee> employees = employeeRepository.findAll();
+        return employeeMapper.toDtoList(employees);
     }
 
     @Override
@@ -37,14 +41,14 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public EmployeeModel updateEmployee(String id, EmployeeModel employeeModel) {
+    public EmployeeUpdateModel updateEmployee(String id, EmployeeUpdateModel employeeModel) {
         EmployeeModel existingEmployeeModel = getEmployeeById(id);
-//        if (existingEmployeeModel != null) {
-//            existingEmployeeModel.setName(employeeModel.getName());
-//            existingEmployeeModel.setDepartment(employeeModel.getDepartment());
-//            existingEmployeeModel.setSalary(employeeModel.getSalary());
-//        }
-        return existingEmployeeModel;
+        if (existingEmployeeModel != null) {
+            Employee employee = employeeUpdateMapper.toEntity(employeeModel);
+            employeeRepository.save(employee);
+
+        }
+        return employeeModel;
     }
 
     @Override

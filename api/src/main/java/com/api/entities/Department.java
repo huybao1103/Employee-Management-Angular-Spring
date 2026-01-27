@@ -11,10 +11,10 @@ public class Department extends BaseEntity{
     @Column(nullable = false, columnDefinition = "varchar(200)")
     private String name;
 
-    @Column(nullable = false, columnDefinition = "varchar(200)")
+    @Column(columnDefinition = "varchar(200)")
     private String address;
 
-    @Column(nullable = false, columnDefinition = "varchar(200)")
+    @Column(columnDefinition = "varchar(200)")
     private String email;
 
     @OneToOne

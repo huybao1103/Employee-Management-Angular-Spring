@@ -1,9 +1,10 @@
 package com.api.controllers;
 
+import com.api.models.Employee.EmployeeUpdateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.api.models.EmployeeModel;
+import com.api.models.Employee.EmployeeModel;
 import com.api.services.interfaces.IEmployeeService;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class EmployeeController {
 
     // Create an employee
     @PostMapping
-    public ResponseEntity<EmployeeModel> createEmployee(@RequestBody EmployeeModel employeeModel) {
+    public ResponseEntity<EmployeeUpdateModel> createEmployee(@RequestBody EmployeeUpdateModel employeeModel) {
         return ResponseEntity.ok(employeeService.createEmployee(employeeModel));
     }
 
@@ -35,7 +36,7 @@ public class EmployeeController {
 
     // Update an employee
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeModel> updateEmployee(@PathVariable String id, @RequestBody EmployeeModel employeeModel) {
+    public ResponseEntity<EmployeeUpdateModel> updateEmployee(@PathVariable String id, @RequestBody EmployeeUpdateModel employeeModel) {
         return ResponseEntity.ok(employeeService.updateEmployee(id, employeeModel));
     }
 

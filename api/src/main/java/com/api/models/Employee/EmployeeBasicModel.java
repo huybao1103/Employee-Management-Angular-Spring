@@ -1,10 +1,11 @@
-package com.api.models;
+package com.api.models.Employee;
 
-public class EmployeeModel extends BaseModel {
+import com.api.models.BaseModel;
+
+public class EmployeeBasicModel extends BaseModel {
     public String id;
     public String name;
     public String email;
-    public DepartmentModel department;
     public double salary;
     public String createdAt;
 }

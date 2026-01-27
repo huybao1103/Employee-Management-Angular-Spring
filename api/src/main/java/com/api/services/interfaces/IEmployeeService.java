@@ -1,13 +1,14 @@
 package com.api.services.interfaces;
 
-import com.api.models.EmployeeModel;
+import com.api.models.Employee.EmployeeModel;
+import com.api.models.Employee.EmployeeUpdateModel;
 
 import java.util.List;
 
 public interface IEmployeeService {
-    EmployeeModel createEmployee(EmployeeModel employeeModel);
+    EmployeeUpdateModel createEmployee(EmployeeUpdateModel employeeModel);
     List<EmployeeModel> getAllEmployees();
     EmployeeModel getEmployeeById(String id);
-    EmployeeModel updateEmployee(String id, EmployeeModel employeeModel);
+    EmployeeUpdateModel updateEmployee(String id, EmployeeUpdateModel employeeModel);
     void deleteEmployee(String id);
 }

@@ -1,13 +1,12 @@
 package com.api.services.implement;
 
 import com.api.entities.Department;
-import com.api.entities.Employee;
-import com.api.models.DepartmentBasicInfoModel;
-import com.api.models.DepartmentModel;
+import com.api.models.Department.DepartmentBasicInfoModel;
+import com.api.models.Department.DepartmentModel;
 import com.api.repositories.interfaces.IDepartmentRepository;
 import com.api.services.interfaces.IDepartmentService;
-import com.api.util.mappers.IDepartmentBasicInfoMapper;
-import com.api.util.mappers.IDepartmentMapper;
+import com.api.util.mappers.Department.IDepartmentBasicInfoMapper;
+import com.api.util.mappers.Department.IDepartmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,8 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public List<DepartmentModel> getAllDepartments() {
-        return departmentMapper.toDtoList(departmentRepository.findAll());
+        List<Department> departments = departmentRepository.findAll();
+        return departmentMapper.toDtoList(departments);
     }
 
     @Override

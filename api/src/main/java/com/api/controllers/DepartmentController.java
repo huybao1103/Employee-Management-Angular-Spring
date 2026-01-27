@@ -1,7 +1,7 @@
 package com.api.controllers;
 
-import com.api.models.DepartmentBasicInfoModel;
-import com.api.models.DepartmentModel;
+import com.api.models.Department.DepartmentBasicInfoModel;
+import com.api.models.Department.DepartmentModel;
 import com.api.services.interfaces.IDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
