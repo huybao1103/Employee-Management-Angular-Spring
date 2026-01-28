@@ -20,6 +20,10 @@ public class Employee extends BaseEntity {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     // Getters and setters
 
     public String getName() {
