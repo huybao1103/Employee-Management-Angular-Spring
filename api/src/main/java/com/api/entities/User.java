@@ -1,19 +1,12 @@
 package com.api.entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity{
-    @Column(nullable = false, columnDefinition = "varchar(20)")
-    private String user_name;
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(20)")
+    private String userName;
 
     @Column(nullable = false, columnDefinition = "varchar(500)")
     private String password;
@@ -21,15 +14,16 @@ public class User extends BaseEntity{
     @Column(nullable = false, columnDefinition = "varchar(50)")
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
-    private Set<Employee> employees = new HashSet<>();
+    @OneToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
-    public String getUser_name() {
-        return user_name;
+    public String getuserName() {
+        return userName;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setuserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -48,11 +42,11 @@ public class User extends BaseEntity{
         this.role = role;
     }
 
-    public Set<Employee> getEmployees() {
-        return employees;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

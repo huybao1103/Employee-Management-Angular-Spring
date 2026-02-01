@@ -1,6 +1,9 @@
 package com.api.controllers;
 
+import com.api.entities.User;
+import com.api.services.interfaces.IUserService;
 import com.api.util.JwtUtil;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,21 +16,28 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
-
     @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private IUserService userService;
+
     /**
      * Login endpoint - returns JWT token
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        // TODO: Validate credentials against database
-        // For now, this is a placeholder
-        
+    public ResponseEntity<?> login(@RequestBody @NotNull LoginRequest loginRequest) {
+        if(!loginRequest.username.equals("admin")) {
+            // Validate credentials against database
+            User user = userService.findByUserName(loginRequest.username);
+
+            if(user == null || !passwordEncoder.matches(loginRequest.password, user.getPassword()))
+                return ResponseEntity.badRequest().body("Account not found.");
+        }
+
         String token = jwtUtil.generateToken(loginRequest.getUsername());
         
         Map<String, String> response = new HashMap<>();
@@ -84,7 +94,9 @@ public class AuthController {
 
     // Inner class for login request
     public static class LoginRequest {
+        @NotNull
         private String username;
+        @NotNull
         private String password;
 
         public LoginRequest() {}

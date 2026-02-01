@@ -2,9 +2,6 @@ package com.api.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.UUID;
-
 @Entity
 @Table(name = "employees")
 public class Employee extends BaseEntity {
@@ -20,7 +17,7 @@ public class Employee extends BaseEntity {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 

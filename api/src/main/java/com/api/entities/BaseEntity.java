@@ -10,9 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
-import java.sql.Types;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -22,7 +20,7 @@ public abstract class BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(length = 36, columnDefinition = "char(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
-    private UUID id = UUID.randomUUID();
+    private UUID id;
 
     @CreatedDate
     @Column(updatable = false)
@@ -60,14 +58,6 @@ public abstract class BaseEntity implements Serializable {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
     }
 
     public String getUpdatedBy() {

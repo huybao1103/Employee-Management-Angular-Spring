@@ -23,7 +23,7 @@ public class UserRegistrationController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserModel userModel) {
         try {
-            if (userModel.user_name == null || userModel.user_name.isBlank()) {
+            if (userModel.userName == null || userModel.userName.isBlank()) {
                 return ResponseEntity.badRequest().body("Username is required");
             }
             if (userModel.password == null || userModel.password.isBlank()) {
@@ -34,7 +34,7 @@ public class UserRegistrationController {
             
             Map<String, String> response = new HashMap<>();
             response.put("message", "User registered successfully");
-            response.put("username", createdUser.user_name);
+            response.put("username", createdUser.userName);
             
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {

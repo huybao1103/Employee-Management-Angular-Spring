@@ -1,8 +1,6 @@
 package com.api.controllers;
 
 import com.api.models.Auth.UserModel;
-import com.api.models.Employee.EmployeeModel;
-import com.api.models.Employee.EmployeeUpdateModel;
 import com.api.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
