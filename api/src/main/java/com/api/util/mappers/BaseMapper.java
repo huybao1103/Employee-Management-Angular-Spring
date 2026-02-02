@@ -2,7 +2,6 @@ package com.api.util.mappers;
 
 import com.api.entities.BaseEntity;
 import com.api.models.BaseModel;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 import java.util.UUID;
