@@ -1,0 +1,15 @@
+.login-page {
+	min-height: calc(100vh - 3.5rem);
+	padding: 2rem;
+	background: #f8f9fa;
+}
+
+.login-card {
+	width: 100%;
+	max-width: 420px;
+	border-radius: 0.5rem;
+}
+
+.login-card .card-body {
+	padding: 2rem;
+}
