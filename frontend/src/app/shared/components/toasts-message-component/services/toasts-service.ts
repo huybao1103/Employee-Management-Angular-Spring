@@ -14,9 +14,7 @@ export class ToastsService {
       body: toast.body ?? '',
       delay: toast.delay ?? 5000,
     };
-    queueMicrotask(() => {
-      this._toasts.update((toasts) => [...toasts, withDefaults]);
-    });
+    this._toasts.update(toasts => [...toasts, withDefaults]);
   }
 
   success(body: string, delay?: number) {
@@ -25,25 +23,6 @@ export class ToastsService {
 
   error(body: string, delay?: number) {
     this.show({ type: ToastType.Error, body, delay: delay ?? 7000 });
-  }
-
-  showErrorFromApi(err: any) {
-    let message = 'An unexpected error occurred.';
-    try {
-      if (err?.error) {
-        if (typeof err.error === 'string') message = err.error;
-        else if (err.error.message) message = err.error.message;
-        else if (err.error?.detail) message = err.error.detail;
-      } else if (err?.message) {
-        message = err.message;
-      } else if (err?.statusText) {
-        message = err.statusText;
-      }
-    } catch {
-      message = 'An unexpected error occurred.';
-    }
-
-    this.error(message, 8000);
   }
 
   remove(toast: ToastInfo) {

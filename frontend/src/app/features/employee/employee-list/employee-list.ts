@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
 import { EmployeeListModel } from '../models/employee-list.model';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-employee-list',
@@ -24,7 +25,9 @@ export class EmployeeListComponent implements OnInit {
 
   load(): void {
     this.loading = true;
-    this.service.list().subscribe({
+    this.service.list()
+    .pipe(first())
+    .subscribe({
       next: (emps) => {
         this.employees = emps;
         this.loading = false;

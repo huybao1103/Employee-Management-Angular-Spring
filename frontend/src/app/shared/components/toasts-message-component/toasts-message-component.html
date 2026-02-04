@@ -5,7 +5,7 @@
             [autohide]="true" 
             [delay]="toast.delay || 5000"
             (hidden)="toastsService.remove(toast)">
-            <ng-template #toastBody><span>{{ toast.body }}</span></ng-template>
+            {{ toast.body }}
         </ngb-toast>
     }
 </div>

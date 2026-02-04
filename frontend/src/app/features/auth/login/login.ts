@@ -1,23 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoginRequestModel } from '../models/LoginRequestModel';
 import { AuthService } from '../services/auth.service';
-import { first } from 'rxjs';
+import { first, finalize } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = new FormBuilder();
 
   form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
 
@@ -30,27 +30,40 @@ export class LoginComponent {
   ) {
   }
 
+  private cd = inject(ChangeDetectorRef);
+
+  ngOnInit(): void {
+    
+  }
+
   submit(): void {
     if (this.form.invalid) return;
     this.error = '';
     this.loading = true;
 
     const payload = this.form.value as LoginRequestModel;
+    let errorMsg = '';
+
     this.auth.login(payload)
-    .pipe(first())
-    .subscribe({
-      next: (errMsg) => {
-        this.loading = false;
-        if (!errMsg) {
-          this.router.navigate(['/employees']);
-        } else {
-          this.error = errMsg;
+      .pipe(
+        first(),
+        finalize(() => {
+          this.loading = false;
+          if (errorMsg) this.error = errorMsg;
+          this.cd.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (errMsg) => {
+          if (!errMsg) {
+            this.router.navigate(['/employees']);
+          } else {
+            errorMsg = errMsg;
+          }
+        },
+        error: (err) => {
+          errorMsg = err?.error?.message || err?.message || 'Login failed';
         }
-      },
-      error: (err) => {
-        this.loading = false;
-        this.error = err?.error?.message || err?.message || 'Login failed';
-      }
-    })
+      });
   }
 }
