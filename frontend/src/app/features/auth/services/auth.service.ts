@@ -1,16 +1,14 @@
 import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
 import { LoginRequestModel } from '../models/LoginRequestModel';
 import { LoginResponseModel } from '../models/LoginResponseModel';
-import { Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly api = inject(ApiService);
-  private readonly auth = inject(AuthService);
   private readonly tokenKey = 'jwt_token';
   
   login(req: LoginRequestModel): Observable<string | null> {
@@ -18,7 +16,7 @@ export class AuthService {
       map(res => {
         const token = res.token;
         if (token) {
-          this.auth.setToken(token);
+          this.setToken(token);
           return null;
         } else {
           return 'Login succeeded but token was not returned.';

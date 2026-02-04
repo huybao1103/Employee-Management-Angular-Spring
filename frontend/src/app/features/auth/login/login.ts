@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-import { ApiService } from '../../../core/services/api.service';
-import { AuthService } from '../services/auth.service';
+import { Component } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { LoginRequestModel } from '../models/LoginRequestModel';
+import { AuthService } from '../services/auth.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ import { LoginRequestModel } from '../models/LoginRequestModel';
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })
-export class Login {
+export class LoginComponent {
   private fb = new FormBuilder();
 
   form = this.fb.group({
@@ -21,11 +21,10 @@ export class Login {
     password: ['', [Validators.required]],
   });
 
-  loading = false;
-  error?: string;
+  loading: boolean = false;
+  error: string = '';
 
   constructor(
-    private api: ApiService,
     private auth: AuthService,
     private router: Router
   ) {
@@ -33,11 +32,13 @@ export class Login {
 
   submit(): void {
     if (this.form.invalid) return;
-    this.error = undefined;
+    this.error = '';
     this.loading = true;
 
     const payload = this.form.value as LoginRequestModel;
-    this.auth.login(payload).subscribe({
+    this.auth.login(payload)
+    .pipe(first())
+    .subscribe({
       next: (errMsg) => {
         this.loading = false;
         if (!errMsg) {

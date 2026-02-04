@@ -11,7 +11,7 @@ import { EmployeeListModel } from '../models/employee-list.model';
   templateUrl: './employee-list.html',
   styleUrls: ['./employee-list.scss'],
 })
-export class EmployeeList implements OnInit {
+export class EmployeeListComponent implements OnInit {
   employees: EmployeeListModel[] = [];
   loading = false;
   error?: string;

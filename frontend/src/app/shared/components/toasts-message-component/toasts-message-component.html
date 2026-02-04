@@ -1,0 +1,11 @@
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    @for (toast of toastsService.toasts(); track toast) {
+        <ngb-toast 
+            [class]="toast.type" 
+            [autohide]="true" 
+            [delay]="toast.delay || 5000"
+            (hidden)="toastsService.remove(toast)">
+            <ng-template #toastBody><span>{{ toast.body }}</span></ng-template>
+        </ngb-toast>
+    }
+</div>
