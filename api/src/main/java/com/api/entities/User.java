@@ -49,4 +49,15 @@ public class User extends BaseEntity{
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
+
+    @Column(nullable = true, columnDefinition = "varchar(500)")
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

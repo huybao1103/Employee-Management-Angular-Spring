@@ -9,4 +9,5 @@ public interface IUserService {
     UserModel createUser(UserModel userModel);
     List<UserModel> getAllUsers();
     User findByUserName(String username);
+    User saveUser(User user);
 }

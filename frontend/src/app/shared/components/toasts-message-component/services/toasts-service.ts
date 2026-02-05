@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { ToastInfo, ToastType } from '../models/ToastInfo.model';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class ToastsService {
     };
     this._toasts.update(toasts => [...toasts, withDefaults]);
   }
-
+  
   success(body: string, delay?: number) {
     this.show({ type: ToastType.Success, body, delay });
   }

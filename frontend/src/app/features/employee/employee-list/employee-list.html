@@ -4,7 +4,7 @@
 		<a class="btn btn-primary" routerLink="/employees/new">New Employee</a>
 	</div>
 
-    @if (loading) {
+    @if (loading()) {
         <div class="text-center my-4">
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -12,8 +12,8 @@
         </div>
     }
 
-    @if (error) {
-        <div class="alert alert-danger">{{ error }}</div>
+    @if (error()) {
+        <div class="alert alert-danger">{{ error() }}</div>
     }
 
     @if (!loading && employees.length) {

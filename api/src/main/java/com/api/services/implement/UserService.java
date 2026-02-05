@@ -38,4 +38,9 @@ public class UserService implements IUserService {
     public User findByUserName(String username) {
         return userRepository.findByUserName(username);
     }
+
+    @Override
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
 }

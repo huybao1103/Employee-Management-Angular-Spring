@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { first } from 'rxjs';
 import { LoginRequestModel } from '../models/LoginRequestModel';
 import { AuthService } from '../services/auth.service';
-import { first, finalize } from 'rxjs';
-import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +12,7 @@ import { ChangeDetectorRef } from '@angular/core';
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private fb = new FormBuilder();
 
   form = this.fb.group({
@@ -21,8 +20,8 @@ export class LoginComponent implements OnInit {
     password: ['', [Validators.required]],
   });
 
-  loading: boolean = false;
-  error: string = '';
+  loading = signal(false);
+  error = signal('');
 
   constructor(
     private auth: AuthService,
@@ -30,39 +29,28 @@ export class LoginComponent implements OnInit {
   ) {
   }
 
-  private cd = inject(ChangeDetectorRef);
-
-  ngOnInit(): void {
-    
-  }
-
   submit(): void {
     if (this.form.invalid) return;
-    this.error = '';
-    this.loading = true;
+    this.error.set('');
+    this.loading.set(true);
 
     const payload = this.form.value as LoginRequestModel;
-    let errorMsg = '';
 
     this.auth.login(payload)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.loading = false;
-          if (errorMsg) this.error = errorMsg;
-          this.cd.detectChanges();
-        })
-      )
+      .pipe(first())
       .subscribe({
         next: (errMsg) => {
+          this.loading.set(false);
           if (!errMsg) {
             this.router.navigate(['/employees']);
           } else {
-            errorMsg = errMsg;
+            this.error.set(errMsg);
           }
         },
         error: (err) => {
-          errorMsg = err?.error?.message || err?.message || 'Login failed';
+          this.loading.set(false);
+          const errorMsg = err?.error?.message || err?.message || 'Login failed';
+          this.error.set(errorMsg);
         }
       });
   }

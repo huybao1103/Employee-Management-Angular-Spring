@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
@@ -14,8 +14,8 @@ import { first } from 'rxjs';
 })
 export class EmployeeListComponent implements OnInit {
   employees: EmployeeListModel[] = [];
-  loading = false;
-  error?: string;
+  loading = signal(false);
+  error = signal('');
 
   constructor(private service: EmployeeService) {}
 
@@ -24,18 +24,18 @@ export class EmployeeListComponent implements OnInit {
   }
 
   load(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.service.list()
     .pipe(first())
     .subscribe({
       next: (emps) => {
         this.employees = emps;
-        this.loading = false;
+        this.loading.set(true);
       },
       error: (err) => {
-        this.error = err?.message || 'Failed to load employees';
-        this.loading = false;
-      },
+        this.error.set(err?.message || 'Failed to load employees');
+        this.loading.set(false);
+      }
     });
   }
 

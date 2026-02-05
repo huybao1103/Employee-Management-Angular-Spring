@@ -30,20 +30,26 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @NotNull LoginRequest loginRequest) {
+        User user = null;
         if(!loginRequest.username.equals("admin")) {
             // Validate credentials against database
-            User user = userService.findByUserName(loginRequest.username);
+            user = userService.findByUserName(loginRequest.username);
 
             if(user == null || !passwordEncoder.matches(loginRequest.password, user.getPassword()))
                 return ResponseEntity.badRequest().body("Account not found.");
         }
 
         String token = jwtUtil.generateToken(loginRequest.getUsername());
-        
+
+        if (user != null) {
+            user.setToken(token);
+            userService.saveUser(user);
+        }
+
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
         response.put("username", loginRequest.getUsername());
-        
+
         return ResponseEntity.ok(response);
     }
 
@@ -82,10 +88,16 @@ public class AuthController {
             
             String username = jwtUtil.extractUsername(token);
             String newToken = jwtUtil.generateToken(username);
-            
+
+            User user = userService.findByUserName(username);
+            if (user != null) {
+                user.setToken(newToken);
+                userService.saveUser(user);
+            }
+
             Map<String, String> response = new HashMap<>();
             response.put("token", newToken);
-            
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Invalid token");
