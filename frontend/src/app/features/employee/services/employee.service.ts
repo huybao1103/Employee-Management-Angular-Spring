@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
-import { EmployeeListModel } from '../models/employee-list.model';
+import { IEmployeeListModel } from '../models/employee-list.model';
+import { IEditEmployeeModel } from '../models/edit-employee.model';
 
 
 @Injectable({ providedIn: 'root' })
@@ -9,20 +10,20 @@ export class EmployeeService {
   private readonly api = inject(ApiService);
   private readonly resource = 'api/employees';
 
-  list(): Observable<EmployeeListModel[]> {
-    return this.api.get<EmployeeListModel[]>(this.resource);
+  list(): Observable<IEmployeeListModel[]> {
+    return this.api.get<IEmployeeListModel[]>(this.resource);
   }
 
-  get(id: number | string): Observable<EmployeeListModel> {
-    return this.api.get<EmployeeListModel>(`${this.resource}/${id}`);
+  get(id: number | string): Observable<IEmployeeListModel> {
+    return this.api.get<IEmployeeListModel>(`${this.resource}/${id}`);
   }
 
-  create(data: Partial<EmployeeListModel>): Observable<EmployeeListModel> {
-    return this.api.post<EmployeeListModel>(this.resource, data);
+  create(data: IEditEmployeeModel) {
+    return this.api.post<IEmployeeListModel>(this.resource, data);
   }
 
-  update(id: number | string, data: Partial<EmployeeListModel>): Observable<EmployeeListModel> {
-    return this.api.put<EmployeeListModel>(`${this.resource}/${id}`, data);
+  update(id: number | string, data: IEditEmployeeModel) {
+    return this.api.put<IEmployeeListModel>(`${this.resource}/${id}`, data);
   }
 
   remove(id: number | string): Observable<void> {

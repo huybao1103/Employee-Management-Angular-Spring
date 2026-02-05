@@ -24,6 +24,7 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public EmployeeUpdateModel createEmployee(EmployeeUpdateModel employeeModel) {
+        employeeModel.id = null;
         Employee emp = employeeUpdateMapper.toEntity(employeeModel);
         employeeRepository.save(emp);
         return employeeModel;

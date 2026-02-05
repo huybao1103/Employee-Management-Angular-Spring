@@ -1,8 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
-import { EmployeeListModel } from '../models/employee-list.model';
+import { IEmployeeListModel } from '../models/employee-list.model';
 import { first } from 'rxjs';
 
 @Component({
@@ -13,11 +13,15 @@ import { first } from 'rxjs';
   styleUrls: ['./employee-list.scss'],
 })
 export class EmployeeListComponent implements OnInit {
-  employees: EmployeeListModel[] = [];
+  employees = signal<IEmployeeListModel[]>([]);
   loading = signal(false);
   error = signal('');
 
-  constructor(private service: EmployeeService) {}
+  constructor(
+    private service: EmployeeService,
+    private router: Router,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -29,8 +33,10 @@ export class EmployeeListComponent implements OnInit {
     .pipe(first())
     .subscribe({
       next: (emps) => {
-        this.employees = emps;
-        this.loading.set(true);
+        console.log(emps);
+        
+        this.employees.set(emps);
+        this.loading.set(false);
       },
       error: (err) => {
         this.error.set(err?.message || 'Failed to load employees');
@@ -39,9 +45,13 @@ export class EmployeeListComponent implements OnInit {
     });
   }
 
-  salary(emp: EmployeeListModel): string {
+  salary(emp: IEmployeeListModel): string {
     const s = emp.salary;
     if (typeof s === 'number') return s.toLocaleString();
     return s ?? '-';
+  }
+
+  editEmployee(id: string | undefined): void {
+    this.router.navigate([{ outlets: { modal: ['employees', id] } }]);
   }
 }

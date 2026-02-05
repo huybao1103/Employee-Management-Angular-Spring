@@ -1,5 +1,5 @@
-export interface EmployeeListModel {
-    id: string;
+export interface IEmployeeListModel {
+    id?: string;
     name: string;
     email: string;
     salary: number;
