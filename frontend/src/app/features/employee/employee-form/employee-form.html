@@ -72,6 +72,9 @@
               class="btn btn-primary"
               [disabled]="loading()"
             >
+              @if (loading()) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              }
               Save
             </button>
             <button

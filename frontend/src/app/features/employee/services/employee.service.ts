@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
+import { first, Observable, tap } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
 import { IEmployeeListModel } from '../models/employee-list.model';
 import { IEditEmployeeModel } from '../models/edit-employee.model';
@@ -10,8 +10,12 @@ export class EmployeeService {
   private readonly api = inject(ApiService);
   private readonly resource = 'api/employees';
 
+  private readonly _employees = signal<IEmployeeListModel[]>([]);
+  readonly employees$ = this._employees.asReadonly();
+  
   list(): Observable<IEmployeeListModel[]> {
-    return this.api.get<IEmployeeListModel[]>(this.resource);
+    return this.api.get<IEmployeeListModel[]>(this.resource)
+    .pipe(tap(emps => this._employees.set(emps)));
   }
 
   get(id: number | string): Observable<IEmployeeListModel> {

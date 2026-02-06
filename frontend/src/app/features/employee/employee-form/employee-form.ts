@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule, Route } from '@angular/router';
-import { first } from 'rxjs';
+import { first, switchMap } from 'rxjs';
 import { EmployeeService } from '../services/employee.service';
 import { IEditEmployeeModel } from '../models/edit-employee.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -70,7 +70,11 @@ export class EmployeeForm implements OnInit, IDialogType {
     const data = this.form.value as IEditEmployeeModel;
     const id = data.id;
     const obs = id ? this.service.update(id, data) : this.service.create(data);
-    obs.pipe(first()).subscribe({
+    obs.pipe(
+      switchMap(() => this.service.list()),
+      first()
+    )
+    .subscribe({
       next: () => this.cancel(),
       error: (err: any) => {
         this.error.set(err?.message || 'Save failed');

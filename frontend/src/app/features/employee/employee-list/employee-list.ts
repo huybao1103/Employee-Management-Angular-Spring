@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { EmployeeService } from '../services/employee.service';
-import { IEmployeeListModel } from '../models/employee-list.model';
 import { first } from 'rxjs';
+import { IEmployeeListModel } from '../models/employee-list.model';
+import { EmployeeService } from '../services/employee.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -13,29 +13,24 @@ import { first } from 'rxjs';
   styleUrls: ['./employee-list.scss'],
 })
 export class EmployeeListComponent implements OnInit {
-  employees = signal<IEmployeeListModel[]>([]);
+  employeeService = inject(EmployeeService);
   loading = signal(false);
   error = signal('');
-
+  
   constructor(
-    private service: EmployeeService,
-    private router: Router,
-    private cd: ChangeDetectorRef
+    private router: Router
   ) {}
-
+  
   ngOnInit(): void {
     this.load();
   }
 
   load(): void {
     this.loading.set(true);
-    this.service.list()
+    this.employeeService.list()
     .pipe(first())
     .subscribe({
       next: (emps) => {
-        console.log(emps);
-        
-        this.employees.set(emps);
         this.loading.set(false);
       },
       error: (err) => {

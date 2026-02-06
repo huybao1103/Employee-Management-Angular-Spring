@@ -3,6 +3,7 @@ package com.api.services.implement;
 import com.api.entities.Department;
 import com.api.models.Department.DepartmentBasicInfoModel;
 import com.api.models.Department.DepartmentModel;
+import com.api.models.OptionsModel;
 import com.api.repositories.interfaces.IDepartmentRepository;
 import com.api.services.interfaces.IDepartmentService;
 import com.api.util.mappers.Department.IDepartmentBasicInfoMapper;
@@ -48,5 +49,13 @@ public class DepartmentService implements IDepartmentService {
     @Override
     public void deleteDepartment(String id) {
         departmentRepository.deleteById(UUID.fromString(id));
+    }
+
+    @Override
+    public List<OptionsModel> getDepartmentOptions() {
+        List<Department> departments = departmentRepository.findAll();
+        return departments.stream()
+                .map(src -> new OptionsModel(src.getId().toString(), src.getName()))
+                .toList();
     }
 }
