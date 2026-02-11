@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtUtil {
@@ -19,31 +20,32 @@ public class JwtUtil {
     @Value("${jwt.secret:mySecretKeyThatIsAtLeast32CharactersLongForHS256Algorithm}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration:86400000}") // 24 hours in milliseconds
-    private long jwtExpiration;
+    // Default durations
+    private static final long DEFAULT_ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000L; // 15 minutes
+    private static final long DEFAULT_REFRESH_TOKEN_EXPIRATION = 30L * 24 * 60 * 60 * 1000L; // 30 days
 
     /**
-     * Generate JWT token from username
+     * Generate access token (short-lived)
      */
-    public String generateToken(String username) {
+    public String generateAccessToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        return createToken(claims, username, DEFAULT_ACCESS_TOKEN_EXPIRATION);
     }
 
     /**
-     * Generate JWT token with additional claims
+     * Generate refresh token (long-lived)
      */
-    public String generateToken(String username, Map<String, Object> claims) {
-        claims.putAll(claims);
-        return createToken(claims, username);
+    public String generateRefreshToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, username, DEFAULT_REFRESH_TOKEN_EXPIRATION);
     }
 
     /**
-     * Create JWT token
+     * Create JWT token with custom expiration
      */
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, String subject, long expirationMillis) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpiration);
+        Date expiryDate = new Date(now.getTime() + expirationMillis);
 
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
@@ -51,7 +53,6 @@ public class JwtUtil {
                 .claims(claims)
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                // the token will be expired in 10 hours
                 .expiration(expiryDate)
                 .signWith(key, Jwts.SIG.HS256)
                 .compact();
@@ -83,7 +84,7 @@ public class JwtUtil {
      */
     public Boolean validateToken(String token, String username) {
         final String tokenUsername = extractUsername(token);
-        return (tokenUsername.equals(username) && !isTokenExpired(token));
+        return (tokenUsername != null && tokenUsername.equals(username) && !isTokenExpired(token));
     }
 
     /**

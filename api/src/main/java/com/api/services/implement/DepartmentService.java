@@ -25,6 +25,7 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public DepartmentBasicInfoModel createDepartment(DepartmentBasicInfoModel departmentModel) {
+        departmentModel.id = null;
         Department department = departmentBasicInfoMapper.toEntity(departmentModel);
         departmentRepository.save(department);
         return null;
@@ -43,6 +44,11 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public DepartmentModel updateDepartment(String id, DepartmentModel departmentModel) {
+        DepartmentModel existingDepartment = getDepartmentById(id);
+        if(existingDepartment != null){
+            Department department = departmentMapper.toEntity(departmentModel);
+            departmentRepository.save(department);
+        }
         return null;
     }
 

@@ -35,10 +35,10 @@
                         <td>{{ emp.name }}</td>
                         <td>{{ emp.email }}</td>
                         <td class="text-end">{{ salary(emp) }}</td>
-                        <td>{{ emp.department }}</td>
+                        <td>{{ emp.department.name }}</td>
                         <td>
-                            <a class="btn btn-sm btn-outline-primary me-2" (click)="editEmployee(emp.id)">View</a>
-                            <a class="btn btn-sm btn-outline-secondary" (click)="editEmployee(emp.id)">Edit</a>
+                            <a class="btn btn-sm btn-outline-primary me-2" (click)="editEmployee(emp.id || '', true)">View</a>
+                            <a class="btn btn-sm btn-outline-secondary" (click)="editEmployee(emp.id || '')">Edit</a>
                         </td>
                     </tr>
                 }

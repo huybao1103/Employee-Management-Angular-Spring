@@ -37,7 +37,7 @@ export class EmployeeListComponent implements OnInit {
         this.error.set(err?.message || 'Failed to load employees');
         this.loading.set(false);
       }
-    });
+    })
   }
 
   salary(emp: IEmployeeListModel): string {
@@ -46,7 +46,7 @@ export class EmployeeListComponent implements OnInit {
     return s ?? '-';
   }
 
-  editEmployee(id: string | undefined): void {
-    this.router.navigate([{ outlets: { modal: ['employees', id] } }]);
+  editEmployee(id: string, view?: boolean): void {
+    this.router.navigate([{ outlets: { modal: ['employees', id, view ?? false] } }]);
   }
 }

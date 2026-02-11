@@ -42,7 +42,7 @@ export class LoginComponent {
         next: (errMsg) => {
           this.loading.set(false);
           if (!errMsg) {
-            this.router.navigate(['/employees']);
+            this.router.navigate(['']);
           } else {
             this.error.set(errMsg);
           }

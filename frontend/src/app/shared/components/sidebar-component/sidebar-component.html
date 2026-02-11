@@ -1,0 +1,10 @@
+<!-- Static sidebar for md+ screens -->
+<aside class="d-none d-md-block">
+	<nav class="nav flex-column" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        @for (item of menuItems; track $index) {
+            <a class="nav-link" [routerLink]="item.route" routerLinkActive="active">
+                <ng-icon [name]="item.icon"></ng-icon> {{ item.label }}
+            </a>
+        }
+	</nav>
+</aside>

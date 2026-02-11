@@ -30,7 +30,7 @@ public class EmployeeController {
 
     // Get an employee by ID
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeModel> getEmployeeById(@PathVariable String id) {
+    public ResponseEntity<EmployeeUpdateModel> getEmployeeById(@PathVariable String id) {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 

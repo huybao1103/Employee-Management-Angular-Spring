@@ -1,4 +1,4 @@
 export interface LoginResponseModel {
-    token: string;
+    accessToken: string;
     username: string;
 }

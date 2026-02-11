@@ -54,38 +54,44 @@
           <!-- Department -->
           <div class="mb-4">
             <label class="form-label">Department</label>
-            <input
+            <select
               type="text"
-              formControlName="department"
+              formControlName="department_id"
               class="form-control"
-              [class.is-invalid]="form.get('department')?.touched && form.get('department')?.invalid"
-            />
+              [class.is-invalid]="form.get('department_id')?.touched && form.get('department_id')?.invalid"
+            >
+              @for (item of departmentOptions(); track $index) {
+                <option [value]="item.value">{{ item.label }}</option>
+              }
+            </select>
             <div class="invalid-feedback">
               Department is required.
             </div>
           </div>
 
           <!-- Actions -->
-          <div class="d-flex justify-content-center gap-2">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="loading()"
-            >
-              @if (loading()) {
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              }
-              Save
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-secondary"
-              (click)="cancel()"
-              [disabled]="loading()"
-            >
-              Cancel
-            </button>
-          </div>
+          @if (!form.disabled) {
+            <div class="d-flex justify-content-center gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="loading() || form.disabled"
+              >
+                @if (loading()) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                }
+                Save
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="cancel()"
+                [disabled]="loading()"
+              >
+                Cancel
+              </button>
+            </div>
+          }
         </form>
     </div>
 </div>

@@ -28,5 +28,18 @@ public interface IEmployeeUpdateMapper extends BaseMapper<Employee, EmployeeUpda
         qualifiedByName = "departmentIdToDepartment"
     )
     Employee toEntity(EmployeeUpdateModel value);
+
+    @Named("departmentToDepartmentId")
+    default String departmentToDepartmentId(Department department) {
+        if(department == null) return null;
+        return department.getId().toString();
+    }
+
+    @Override
+    @Mapping(
+            target = "department_id",
+            source = "department"
+            , qualifiedByName = "departmentToDepartmentId"
+    )
     EmployeeUpdateModel toDto(Employee value);
 }

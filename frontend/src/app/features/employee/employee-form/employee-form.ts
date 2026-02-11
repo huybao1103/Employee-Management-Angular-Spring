@@ -1,12 +1,14 @@
-import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, RouterModule, Route } from '@angular/router';
-import { first, switchMap } from 'rxjs';
-import { EmployeeService } from '../services/employee.service';
-import { IEditEmployeeModel } from '../models/edit-employee.model';
+import { Component, Signal, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { first, switchMap } from 'rxjs';
 import { IDialogType } from '../../../shared/components/modal-base-component/modal-base-component';
+import { IEditEmployeeModel } from '../models/edit-employee.model';
+import { EmployeeService } from '../services/employee.service';
+import { IOptionsModel } from '../../../shared/models/options.model';
+import { DepartmentService } from '../../department/services/department-service';
 
 @Component({
   selector: 'app-employee-form',
@@ -15,40 +17,42 @@ import { IDialogType } from '../../../shared/components/modal-base-component/mod
   templateUrl: './employee-form.html',
   styleUrls: ['./employee-form.scss'],
 })
-export class EmployeeForm implements OnInit, IDialogType {
-  form: any;
+export class EmployeeForm implements IDialogType {
+  form: FormGroup;
 
   loading = signal(false);
   error = signal('');
 
+  departmentOptions = signal<IOptionsModel[]>([]);
+
   constructor(
     private fb: FormBuilder,
     private service: EmployeeService,
-    private router: Router,
-    private route: ActivatedRoute,
     private modal: NgbActiveModal,
+    private departmentService: DepartmentService,
   ) {
     this.form = this.fb.group({
       id: [''],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       salary: [0, [Validators.required, Validators.min(0)]],
-      department: ['', Validators.required]
+      department_id: ['', Validators.required]
     });
   }
 
-  dialogInit(para: { id: string }): void {
-    if(para && para.id) {
-      this.form.patchValue({ id: para.id });
-      this.load(para.id);
+  dialogInit(para: { id: string, view: string }): void {
+    if(para) {
+      if(para.id) {
+        this.load(para.id);
+      }
+      if(para.view === 'true') {
+        this.form.disable();
+      }
     }
+    this.loadDepartmentOptions();
   }
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-  }
-
-  load(id: string | number): void {
+  load(id: string): void {
     this.loading.set(true);
     this.service.get(id)
       .pipe(first())
@@ -60,6 +64,19 @@ export class EmployeeForm implements OnInit, IDialogType {
         error: (err) => {
           this.error.set(err?.message || 'Failed to load employee');
           this.loading.set(false);
+        }
+      });
+  }
+
+  loadDepartmentOptions(): void {
+    this.departmentService.options()
+      .pipe(first())
+      .subscribe({
+        next: (options) => {
+          this.departmentOptions.set(options);
+        },
+        error: (err) => {
+          this.error.set(err?.message || 'Failed to load department options');
         }
       });
   }

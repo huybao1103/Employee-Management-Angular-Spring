@@ -1,0 +1,29 @@
+/* Sidebar component styles */
+.sidebar-static {
+	width: 220px;
+	padding: 1rem;
+	background: #f8f9fa;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	overflow-y: auto;
+	border-right: 1px solid rgba(0,0,0,0.05);
+	z-index: 1020; /* below navbar but above content */
+}
+
+/* Ensure page content is not covered on md+ screens. Consumers should add left padding or we can handle it globally. */
+@media (min-width: 768px) {
+	:host ::ng-deep body, :host ::ng-deep app-root {
+		padding-left: 220px;
+	}
+}
+
+.offcanvas-body .nav-link, .sidebar-static .nav-link {
+	padding: 0.5rem 0;
+}
+
+.nav-link.active {
+	font-weight: 600;
+}
+

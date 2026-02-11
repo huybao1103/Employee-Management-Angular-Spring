@@ -37,13 +37,13 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public EmployeeModel getEmployeeById(String id) {
-        return employeeMapper.toDto(employeeRepository.getReferenceById(UUID.fromString(id)));
+    public EmployeeUpdateModel getEmployeeById(String id) {
+        return employeeUpdateMapper.toDto(employeeRepository.getReferenceById(UUID.fromString(id)));
     }
 
     @Override
     public EmployeeUpdateModel updateEmployee(String id, EmployeeUpdateModel employeeModel) {
-        EmployeeModel existingEmployeeModel = getEmployeeById(id);
+        EmployeeUpdateModel existingEmployeeModel = getEmployeeById(id);
         if (existingEmployeeModel != null) {
             Employee employee = employeeUpdateMapper.toEntity(employeeModel);
             employeeRepository.save(employee);

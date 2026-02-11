@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FeaturesRoutingModule } from './features-routing-module';
+import { NgModule } from '@angular/core';
 import { ToastsMessageComponent } from '../shared/components/toasts-message-component/toasts-message-component';
+import { FeaturesRoutingModule } from './features-routing-module';
 
 
 
