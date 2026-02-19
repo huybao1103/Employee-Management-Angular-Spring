@@ -6,7 +6,7 @@ import com.api.entities.User;
 import com.api.repositories.interfaces.IUserRepository;
 
 @Repository
-public abstract class UserRepository implements IUserRepository {
+abstract class UserRepository implements IUserRepository {
     @Override
     public User findByUserName(String user_name) {
 

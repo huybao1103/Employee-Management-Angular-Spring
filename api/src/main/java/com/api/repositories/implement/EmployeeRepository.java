@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.api.repositories.interfaces.IEmployeeRepository;
 
 @Repository
-public abstract class EmployeeRepository implements IEmployeeRepository {
+abstract class EmployeeRepository implements IEmployeeRepository {
 }

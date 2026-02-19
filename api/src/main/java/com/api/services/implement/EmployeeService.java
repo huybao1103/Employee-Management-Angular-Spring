@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class EmployeeService implements IEmployeeService {
+class EmployeeService implements IEmployeeService {
     @Autowired
     private IEmployeeMapper employeeMapper;
     @Autowired

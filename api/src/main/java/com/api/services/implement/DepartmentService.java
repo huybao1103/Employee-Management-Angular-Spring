@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class DepartmentService implements IDepartmentService {
+class DepartmentService implements IDepartmentService {
     @Autowired
     private IDepartmentMapper departmentMapper;
     @Autowired
