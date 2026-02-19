@@ -32,6 +32,11 @@ export class SidebarComponent {
       route: '/departments',
       icon: 'bootstrapBuildingsFill'
     },
+    {
+      label: 'Users',
+      route: '/users',
+      icon: 'bootstrapPeopleFill'
+    },
   ];
 
   constructor(public activeOffcanvas: NgbActiveOffcanvas) {}

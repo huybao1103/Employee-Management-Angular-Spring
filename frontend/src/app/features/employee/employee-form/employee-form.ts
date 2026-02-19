@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Signal, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { first, switchMap } from 'rxjs';
 import { IDialogType } from '../../../shared/components/modal-base-component/modal-base-component';
-import { IEditEmployeeModel } from '../models/edit-employee.model';
-import { EmployeeService } from '../services/employee.service';
 import { IOptionsModel } from '../../../shared/models/options.model';
 import { DepartmentService } from '../../department/services/department-service';
+import { IEditEmployeeModel } from '../models/edit-employee.model';
+import { EmployeeService } from '../services/employee.service';
 
 @Component({
   selector: 'app-employee-form',

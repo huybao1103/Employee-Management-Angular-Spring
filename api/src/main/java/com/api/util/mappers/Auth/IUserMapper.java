@@ -1,7 +1,7 @@
 package com.api.util.mappers.Auth;
 
 import com.api.entities.User;
-import com.api.models.Auth.UserModel;
+import com.api.models.User.UserModel;
 import com.api.util.mappers.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

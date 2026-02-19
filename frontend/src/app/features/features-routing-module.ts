@@ -6,6 +6,8 @@ import { EmployeeListComponent } from './employee/employee-list/employee-list';
 import { FeaturesComponent } from './features.component';
 import { DepartmentForm } from './department/department-form/department-form';
 import { DepartmentListComponent } from './department/department-list/department-list';
+import { UserListComponent } from './user/user-list/user-list';
+import { UserFormComponent } from './user/user-form/user-form';
 
 const routes: Routes = [
   {
@@ -41,6 +43,16 @@ const routes: Routes = [
         component: ModalbaseComponent,
         outlet: 'modal',
         data: { component: DepartmentForm }
+      },
+      {
+        path: 'users',
+        component: UserListComponent
+      },
+      {
+        path: 'users/:id/:view',
+        component: ModalbaseComponent,
+        outlet: 'modal',
+        data: { component: UserFormComponent }
       },
     ]
   },
