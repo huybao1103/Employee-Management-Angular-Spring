@@ -11,12 +11,16 @@ public class User extends BaseEntity{
     @Column(nullable = false, columnDefinition = "varchar(500)")
     private String password;
 
-    @Column(nullable = false, columnDefinition = "varchar(50)")
-    private String role;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @OneToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
+
+    @Column(columnDefinition = "varchar(500)")
+    private String token;
 
     public String getuserName() {
         return userName;
@@ -34,11 +38,11 @@ public class User extends BaseEntity{
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -49,9 +53,6 @@ public class User extends BaseEntity{
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
-
-    @Column(nullable = true, columnDefinition = "varchar(500)")
-    private String token;
 
     public String getToken() {
         return token;

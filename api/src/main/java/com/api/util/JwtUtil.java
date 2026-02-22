@@ -27,16 +27,14 @@ public class JwtUtil {
     /**
      * Generate access token (short-lived)
      */
-    public String generateAccessToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
+    public String generateAccessToken(String username, Map<String, Object> claims) {
         return createToken(claims, username, DEFAULT_ACCESS_TOKEN_EXPIRATION);
     }
 
     /**
      * Generate refresh token (long-lived)
      */
-    public String generateRefreshToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
+    public String generateRefreshToken(String username, Map<String, Object> claims) {
         return createToken(claims, username, DEFAULT_REFRESH_TOKEN_EXPIRATION);
     }
 
@@ -97,5 +95,17 @@ public class JwtUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    /**
+     * Extract authorities from token claims
+     */
+    @SuppressWarnings("unchecked")
+    public java.util.List<String> extractAuthorities(String token) {
+        Object authoritiesClaim = extractAllClaims(token).get("authorities");
+        if (authoritiesClaim instanceof java.util.List) {
+            return (java.util.List<String>) authoritiesClaim;
+        }
+        return new java.util.ArrayList<>();
     }
 }

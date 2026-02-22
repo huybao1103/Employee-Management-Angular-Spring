@@ -8,6 +8,9 @@ import { DepartmentForm } from './department/department-form/department-form';
 import { DepartmentListComponent } from './department/department-list/department-list';
 import { UserListComponent } from './user/user-list/user-list';
 import { UserFormComponent } from './user/user-form/user-form';
+import { authGuard } from '../core/auth-guard';
+import { AccessDeniedComponent } from '../shared/components/access-denied-component/access-denied-component';
+import { PoliciesKeys } from '../shared/const/policies-keys.const';
 
 const routes: Routes = [
   {
@@ -20,39 +23,52 @@ const routes: Routes = [
     component: FeaturesComponent,
     children: [
       {
+        path: 'access-denied',
+        component: AccessDeniedComponent
+      },
+      {
         path: '',
         redirectTo: 'employees',
         pathMatch: 'full'
       },
       {
         path: 'employees',
-        component: EmployeeListComponent
+        component: EmployeeListComponent,
+        canActivate: [authGuard],
+        data: { authorities: [PoliciesKeys.EmployeeView] }
       },
       {
         path: 'employees/:id/:view',
         component: ModalbaseComponent,
         outlet: 'modal',
-        data: { component: EmployeeForm }
+        canActivate: [authGuard],
+        data: { component: EmployeeForm, authorities: [PoliciesKeys.EmployeeView, PoliciesKeys.EmployeeUpdate] }
       },
       {
         path: 'departments',
-        component: DepartmentListComponent
+        component: DepartmentListComponent,
+        canActivate: [authGuard],
+        data: { authorities: [PoliciesKeys.DepartmentView] }
       },
       {
         path: 'departments/:id/:view',
         component: ModalbaseComponent,
         outlet: 'modal',
-        data: { component: DepartmentForm }
+        canActivate: [authGuard],
+        data: { component: DepartmentForm, authorities: [PoliciesKeys.DepartmentView, PoliciesKeys.DepartmentUpdate] }
       },
       {
         path: 'users',
-        component: UserListComponent
+        component: UserListComponent,
+        canActivate: [authGuard],
+        data: { authorities: [PoliciesKeys.UserView] }
       },
       {
         path: 'users/:id/:view',
         component: ModalbaseComponent,
         outlet: 'modal',
-        data: { component: UserFormComponent }
+        canActivate: [authGuard],
+        data: { component: UserFormComponent, authorities: [PoliciesKeys.UserView, PoliciesKeys.UserUpdate] }
       },
     ]
   },

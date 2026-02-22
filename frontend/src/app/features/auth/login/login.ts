@@ -49,7 +49,7 @@ export class LoginComponent {
         },
         error: (err) => {
           this.loading.set(false);
-          const errorMsg = err?.error?.message || err?.message || 'Login failed';
+          const errorMsg = err?.error?.message || err?.error || err?.message || 'Login failed';
           this.error.set(errorMsg);
         }
       });

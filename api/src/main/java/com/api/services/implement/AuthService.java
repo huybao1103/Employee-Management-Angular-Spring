@@ -1,5 +1,6 @@
 package com.api.services.implement;
 
+import com.api.entities.RoleClaim;
 import com.api.entities.User;
 import com.api.models.Auth.LoginRequest;
 import com.api.models.Auth.LoginResponse;
@@ -8,6 +9,9 @@ import com.api.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 class AuthService implements IAuthService {
@@ -24,6 +28,7 @@ class AuthService implements IAuthService {
     public LoginResponse login(LoginRequest loginRequest) {
         User user = null;
         String username = loginRequest.getUsername();
+
         if(!username.equals("admin")) {
             // Validate credentials against database
             user = userService.findByUserName(username);
@@ -32,8 +37,9 @@ class AuthService implements IAuthService {
                 return null;
         }
 
-        String accessToken = jwtUtil.generateAccessToken(username);
-        String refreshToken = jwtUtil.generateRefreshToken(username);
+        Map<String, Object> claims = getClaimsForUser(user);
+        String accessToken = jwtUtil.generateAccessToken(username, claims);
+        String refreshToken = jwtUtil.generateRefreshToken(username, claims);
 
         if (user != null) {
             user.setToken(refreshToken);
@@ -64,8 +70,9 @@ class AuthService implements IAuthService {
             throw new IllegalArgumentException("Invalid refresh token");
         }
 
-        String newAccessToken = jwtUtil.generateAccessToken(username);
-        String newRefreshToken = jwtUtil.generateRefreshToken(username);
+        Map<String, Object> claims = getClaimsForUser(user);
+        String newAccessToken = jwtUtil.generateAccessToken(username, claims);
+        String newRefreshToken = jwtUtil.generateRefreshToken(username, claims);
 
         user.setToken(newRefreshToken);
         userService.saveUser(user);
@@ -75,5 +82,13 @@ class AuthService implements IAuthService {
         loginResponse.setRefreshToken(newRefreshToken);
         loginResponse.setUsername(username);
         return loginResponse;
+    }
+
+    private Map<String, Object> getClaimsForUser(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        if (user != null && user.getRole() != null && !user.getRole().getRoleClaims().isEmpty()) {
+            claims.put("authorities", user.getRole().getRoleClaims().stream().map(RoleClaim::getClaim).toList());
+        }
+        return claims;
     }
 }
